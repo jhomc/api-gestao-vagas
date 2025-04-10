@@ -1,4 +1,4 @@
-package br.com.jhonata.gestao_vagas.modules.candidate.controller;
+package br.com.jhonata.gestao_vagas.modules.candidate.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

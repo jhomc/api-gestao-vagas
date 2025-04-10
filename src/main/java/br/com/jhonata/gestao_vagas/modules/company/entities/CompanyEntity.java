@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ public class CompanyEntity {
   private String name;
 
   @Pattern(regexp = "\\S+", message = "O nome de usuário não pode conter espaços")
+  @NotEmpty(message = "O nome de usuário não pode ser vazio")
   private String username;
 
   @Email(message = "Email inválido")
