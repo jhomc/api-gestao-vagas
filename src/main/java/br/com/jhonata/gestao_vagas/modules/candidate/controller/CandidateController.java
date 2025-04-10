@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhonata.gestao_vagas.exceptions.UserFoundException;
 import br.com.jhonata.gestao_vagas.modules.candidate.CandidateEntity;
-import br.com.jhonata.gestao_vagas.modules.candidate.CandidateRepository;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import jakarta.validation.Valid;
 
