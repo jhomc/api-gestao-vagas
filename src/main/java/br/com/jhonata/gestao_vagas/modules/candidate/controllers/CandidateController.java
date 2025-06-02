@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhonata.gestao_vagas.exceptions.UserFoundException;
 import br.com.jhonata.gestao_vagas.modules.candidate.CandidateEntity;
-import br.com.jhonata.gestao_vagas.modules.candidate.dto.CandidateProfileResponseDTO;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.CandidateProfileUseCase;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,6 +39,7 @@ public class CandidateController {
   }
 
   @GetMapping("/")
+  @PreAuthorize("hasRole('CANDIDATE')")
   public ResponseEntity<Object> get(HttpServletRequest request) {
     var candidateId = request.getAttribute("candidate_id");
 
