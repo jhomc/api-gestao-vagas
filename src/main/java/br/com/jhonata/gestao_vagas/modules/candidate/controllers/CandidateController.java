@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.jhonata.gestao_vagas.exceptions.UserFoundException;
 import br.com.jhonata.gestao_vagas.modules.candidate.CandidateEntity;
+import br.com.jhonata.gestao_vagas.modules.candidate.dto.CandidateProfileResponseDTO;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.CandidateProfileUseCase;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
@@ -69,11 +70,12 @@ public class CandidateController {
   @GetMapping("/job")
   @PreAuthorize("hasRole('CANDIDATE')")
   @Tag(name = "Candidato", description = "Informações do candidato")
-  @Operation(summary = "Lista vagas de acordo com o filtro", description = "Essa função é responsável por listar as vagas de acordo com o filtro")
+  @Operation(summary = "Perfil do candidato", description = "Essa função é responsável por buscar as informações do perfil do candidato")
   @ApiResponses({
       @ApiResponse(responseCode = "200", content = {
-          @Content(array = @ArraySchema(schema = @Schema(implementation = JobEntity.class)))
+          @Content(schema = @Schema(implementation = CandidateProfileResponseDTO.class))
       }),
+      @ApiResponse(responseCode = "400", description = "User not found")
   })
   @SecurityRequirement(name = "jwt_auth")
   public List<JobEntity> findJobByFilter(@RequestParam String filter) {
