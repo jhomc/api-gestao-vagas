@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.jhonata.gestao_vagas.exceptions.UserFoundException;
 import br.com.jhonata.gestao_vagas.modules.candidate.CandidateEntity;
 import br.com.jhonata.gestao_vagas.modules.candidate.dto.CandidateProfileResponseDTO;
+import br.com.jhonata.gestao_vagas.modules.candidate.useCases.ApplyJobCandidateUseCase;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.CandidateProfileUseCase;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.jhonata.gestao_vagas.modules.candidate.useCases.ListAllJobsByFilterUseCase;
@@ -43,6 +44,9 @@ public class CandidateController {
 
   @Autowired
   private ListAllJobsByFilterUseCase listAllJobsByFilterUseCase;
+
+  @Autowired
+  private ApplyJobCandidateUseCase ApplyJobCandidateUseCase;
 
   @PostMapping("/")
   @Operation(summary = "Cadastro de candidato", description = "Essa função é responsável por cadastrar um candidato")
@@ -86,5 +90,20 @@ public class CandidateController {
   @SecurityRequirement(name = "jwt_auth")
   public List<JobEntity> findJobByFilter(@RequestParam String filter) {
     return this.listAllJobsByFilterUseCase.execute(filter);
+  }
+
+  @PostMapping("/apply")
+  @PreAuthorize("hasRole('CANDIDATE')")
+  @Operation(summary = "Candidatar-se a uma vaga", description = "Essa função é responsável por candidatar o usuário a uma vaga")
+  @SecurityRequirement(name = "jwt_auth")
+  public ResponseEntity<Object> applyJob(@RequestBody UUID idJob, HttpServletRequest request) {
+    var candidateId = request.getAttribute("candidate_id");
+
+    try {
+      var result = this.ApplyJobCandidateUseCase.execute(UUID.fromString(candidateId.toString()), idJob);
+      return ResponseEntity.ok().body(result);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 }

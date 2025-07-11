@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import br.com.jhonata.gestao_vagas.exceptions.JobNotFoundException;
 import br.com.jhonata.gestao_vagas.exceptions.UserNotFoundException;
 import br.com.jhonata.gestao_vagas.modules.candidate.CandidateRepository;
+import br.com.jhonata.gestao_vagas.modules.candidate.entity.ApplyJobEntity;
+import br.com.jhonata.gestao_vagas.modules.candidate.repository.ApplyJobRepository;
 import br.com.jhonata.gestao_vagas.modules.company.repositories.JobRepository;
 
 @Service
@@ -18,9 +20,12 @@ public class ApplyJobCandidateUseCase {
   @Autowired
   private JobRepository jobRepository;
 
+  @Autowired
+  private ApplyJobRepository applyJobRepository;
+
   // ID do candidato
   // ID da vaga
-  public void execute(UUID idCandidate, UUID idJob) {
+  public ApplyJobEntity execute(UUID idCandidate, UUID idJob) {
     // Validar se o candidato existe
     this.candidateRepository.findById(idCandidate)
         .orElseThrow(() -> {
@@ -34,5 +39,13 @@ public class ApplyJobCandidateUseCase {
         });
 
     // Candidato se inscrever na vaga
+    var applyJob = ApplyJobEntity.builder()
+        .candidateId(idCandidate)
+        .jobId(idJob)
+        .build();
+
+    applyJob = applyJobRepository.save(applyJob);
+
+    return applyJob;
   }
 }
